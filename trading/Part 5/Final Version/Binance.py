@@ -141,6 +141,7 @@ class Binance:
 			# Then, for every other 1000 candles, we get them, but starting at the beginning
 			# of the previously received candles.
 			df2 = self.GetSymbolKlines(symbol, interval, limit=1000, end_time=df['time'][0])
+			df2 = df2.drop(len(df2)-1, inplace=True)
 			df = df2.append(df, ignore_index = True)
 			repeat_rounds = repeat_rounds - 1
 		
