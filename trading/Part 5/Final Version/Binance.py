@@ -131,6 +131,7 @@ class Binance:
 		repeat_rounds = 0
 		if limit > 1000:
 			repeat_rounds = int(limit/1000)
+			missing_quantity = repeat_rounds+1
 		initial_limit = limit % 1000
 		if initial_limit == 0:
 			initial_limit = 1000
@@ -144,7 +145,11 @@ class Binance:
 			df2 = df2.drop(len(df2)-1, inplace=True)
 			df = df2.append(df, ignore_index = True)
 			repeat_rounds = repeat_rounds - 1
-		
+		if missing_quantity>0:
+			df2 = self.GetSymbolKlines(symbol, interval, limit=missing_quantity, end_time=df['time'][0])
+			df2 = df2.drop(len(df2)-1, inplace=True)
+			df = df2.append(df, ignore_index = True)
+			
 		return df
 
 	def GetAccountData(self) -> dict:
